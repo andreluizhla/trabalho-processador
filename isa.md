@@ -6,57 +6,53 @@ Renan Feitosa (GRR2026XXXX)
 
 # Formato de Instruções
 
-# Formato de Instruções
-
-<div style="display: flex; justify-content: center;">
-  <table style="text-align: center; border-collapse: collapse; width: 80%;">
-    <thead>
-      <tr>
-        <th>19</th>
-        <th>16</th>
-        <th>15</th>
-        <th>12</th>
-        <th>11</th>
-        <th>8</th>
-        <th>7</th>
-        <th>4</th>
-        <th>3</th>
-        <th>0</th>
-        <th>Tipo</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td colspan="2"><b>funct</b></td>
-        <td colspan="2"><b>rs2</b></td>
-        <td colspan="2"><b>rs1</b></td>
-        <td colspan="2"><b>rd</b></td>
-        <td colspan="2"><b>opcode</b></td>
-        <td><b>R</b></td>
-      </tr>
-      <tr>
-        <td colspan="4"><b>imm</b></td>
-        <td colspan="2"><b>rs1</b></td>
-        <td colspan="2"><b>rd</b></td>
-        <td colspan="2"><b>opcode</b></td>
-        <td><b>I</b></td>
-      </tr>
-      <tr>
-        <td colspan="4"><b>imm</b></td>
-        <td colspan="2"><b>rs1</b></td>
-        <td colspan="2"><b>rs2</b></td>
-        <td colspan="2"><b>opcode</b></td>
-        <td><b>B</b></td>
-      </tr>
-      <tr>
-        <td colspan="6"><b>imm</b></td>
-        <td colspan="2"><b>rd</b></td>
-        <td colspan="2"><b>opcode</b></td>
-        <td><b>J</b></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<table align="center" style="text-align: center; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th align="center">19</th>
+      <th align="center">16</th>
+      <th align="center">15</th>
+      <th align="center">12</th>
+      <th align="center">11</th>
+      <th align="center">8</th>
+      <th align="center">7</th>
+      <th align="center">4</th>
+      <th align="center">3</th>
+      <th align="center">0</th>
+      <th align="center">Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2" align="center"><b>funct</b></td>
+      <td colspan="2" align="center"><b>rs2</b></td>
+      <td colspan="2" align="center"><b>rs1</b></td>
+      <td colspan="2" align="center"><b>rd</b></td>
+      <td colspan="2" align="center"><b>opcode</b></td>
+      <td align="center"><b>R</b></td>
+    </tr>
+    <tr>
+      <td colspan="4" align="center"><b>imm</b></td>
+      <td colspan="2" align="center"><b>rs1</b></td>
+      <td colspan="2" align="center"><b>rd</b></td>
+      <td colspan="2" align="center"><b>opcode</b></td>
+      <td align="center"><b>I</b></td>
+    </tr>
+    <tr>
+      <td colspan="4" align="center"><b>imm</b></td>
+      <td colspan="2" align="center"><b>rs1</b></td>
+      <td colspan="2" align="center"><b>rs2</b></td>
+      <td colspan="2" align="center"><b>opcode</b></td>
+      <td align="center"><b>B</b></td>
+    </tr>
+    <tr>
+      <td colspan="6" align="center"><b>imm</b></td>
+      <td colspan="2" align="center"><b>rd</b></td>
+      <td colspan="2" align="center"><b>opcode</b></td>
+      <td align="center"><b>J</b></td>
+    </tr>
+  </tbody>
+</table>
 
 # Instruções 
 
