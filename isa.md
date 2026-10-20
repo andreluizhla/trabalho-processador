@@ -6,12 +6,55 @@ Renan Feitosa (GRR2026XXXX)
 
 # Formato de Instruções
 
-| 19 | 16 | 15 | 12 | 11 | 8 | 7 | 4 | 3 | 0 | Tipo |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **funct** |  | **rs2** |  | **rs1** |  | **rd** |  | **opcode** |  | **R** |
-| **imm** |  |  |  | **rs1** |  | **rd** |  | **opcode** |  | **I** |
-| **imm** |  |  |  | **rs1** |  | **rs1** |  | **opcode** |  | **B** |
-| **imm** |  |  |  |  |  | **rd** |  | **opcode** |  | **J** |
+# Formato de Instruções
+
+<table>
+  <thead>
+    <tr>
+      <th>19</th>
+      <th>16</th>
+      <th>15</th>
+      <th>12</th>
+      <th>11</th>
+      <th>8</th>
+      <th>7</th>
+      <th>4</th>
+      <th>3</th>
+      <th>0</th>
+      <th>Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2"><b>funct</b></td>
+      <td colspan="2"><b>rs2</b></td>
+      <td colspan="2"><b>rs1</b></td>
+      <td colspan="2"><b>rd</b></td>
+      <td colspan="2"><b>opcode</b></td>
+      <td><b>R</b></td>
+    </tr>
+    <tr>
+      <td colspan="4"><b>imm</b></td>
+      <td colspan="2"><b>rs1</b></td>
+      <td colspan="2"><b>rd</b></td>
+      <td colspan="2"><b>opcode</b></td>
+      <td><b>I</b></td>
+    </tr>
+    <tr>
+      <td colspan="4"><b>imm</b></td>
+      <td colspan="2"><b>rs1</b></td>
+      <td colspan="2"><b>rs2</b></td>
+      <td colspan="2"><b>opcode</b></td>
+      <td><b>B</b></td>
+    </tr>
+    <tr>
+      <td colspan="6"><b>imm</b></td>
+      <td colspan="2"><b>rd</b></td>
+      <td colspan="2"><b>opcode</b></td>
+      <td><b>J</b></td>
+    </tr>
+  </tbody>
+</table>
 
 # Instruções 
 
