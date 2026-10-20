@@ -92,10 +92,9 @@ Renan Feitosa (GRR2026XXXX)
     <tr><td>B</td><td>bge</td><td>if (rs1 &gt;= rs2) PC += imm</td><td>bge rs1, rs2, imm</td><td>1001</td><td></td></tr>
     <tr><td>J</td><td>jal</td><td>rd = PC + 1; PC += imm</td><td>jal rd, imm</td><td>1010</td><td></td></tr>
     <tr><td>I</td><td>jalr</td><td>rd = PC + 1; PC = rs1 + imm</td><td>jalr rd, rs1, imm</td><td>1011</td><td></td></tr>
-    <tr><td>I</td><td>ebreak</td><td>Finaliza o programa</td><td>-</td><td>1100</td><td></td></tr>
+    <tr><td>I</td><td>ebreak</td><td>Finaliza o programa</td><td>ebreak</td><td>1100</td><td></td></tr>
     <tr>
-      <td rowspan="3" style="vertical-align: middle;">Expansão<br>Futura</td>
-      <td rowspan="3" colspan="3" style="vertical-align: middle; color: gray;">Reservado para implementações futuras</td>
+      <td rowspan="4" colspan="4" style="vertical-align: middle; color: gray;">Reservado para expansão futura</td>
       <td>1101</td>
       <td></td>
     </tr>
