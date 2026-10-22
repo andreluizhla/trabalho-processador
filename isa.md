@@ -76,9 +76,9 @@ Renan Feitosa (GRR2026XXXX)
     <tr><td>R</td><td>or</td><td>rd = rs1 | rs2</td><td>or rd, rs1, rs2</td><td>0000</td><td>0101</td></tr>
     <tr><td>R</td><td>and</td><td>rd = rs1 &amp; rs2</td><td>and rd, rs1, rs2</td><td>0000</td><td>0110</td></tr>
     <tr><td>R</td><td>xor</td><td>rd = rs1 ^ rs2</td><td>xor rd, rs1, rs2</td><td>0000</td><td>0111</td></tr>
-    <tr><td>R</td><td>sll</td><td>rd = rs1 &lt;&lt; rs2</td><td>sll rd, rs1, rs2</td><td>0000</td><td>1000</td></tr>
-    <tr><td>R</td><td>srl</td><td>rd = rs1 &gt;&gt; rs2</td><td>srl rd, rs1, rs2</td><td>0000</td><td>1001</td></tr>
-    <tr><td>R</td><td>not</td><td>rd = !rs1</td><td>not rd, rs1, x0</td><td>0000</td><td>1010</td></tr>
+    <tr><td>R</td><td>not</td><td>rd = !rs1</td><td>not rd, rs1, x0</td><td>0000</td><td>1000</td></tr>
+    <tr><td>R</td><td>sll</td><td>rd = rs1 &lt;&lt; rs2</td><td>sll rd, rs1, rs2</td><td>0000</td><td>1001</td></tr>
+    <tr><td>R</td><td>srl</td><td>rd = rs1 &gt;&gt; rs2</td><td>srl rd, rs1, rs2</td><td>0000</td><td>1010</td></tr>
     <tr><td>R</td><td>sra</td><td>rd = rs1 &gt;&gt; rs2</td><td>sra rd, rs1, rs2</td><td>0000</td><td>1011</td></tr>
     <tr><td>R</td><td>mac</td><td>rd = rd + (rs1 * rs2)</td><td>mac rd, rs1, rs2</td><td>0000</td><td>1100</td></tr>
     <tr><td>I</td><td>addi</td><td>rd = rs1 + imm</td><td>addi rd, rs1, imm</td><td>0001</td><td></td></tr>
@@ -94,7 +94,7 @@ Renan Feitosa (GRR2026XXXX)
     <tr><td>I</td><td>jalr</td><td>rd = PC + 1; PC = rs1 + imm</td><td>jalr rd, rs1, imm</td><td>1011</td><td></td></tr>
     <tr><td>I</td><td>ebreak</td><td>Finaliza o programa</td><td>ebreak</td><td>1100</td><td></td></tr>
     <tr>
-      <td rowspan="4" colspan="4" style="vertical-align: middle; color: gray;">Reservado para expansão futura</td>
+      <td rowspan="3" colspan="4" style="vertical-align: middle; text-align: center;">Reservado para expansão futura</td>
       <td>1101</td>
       <td></td>
     </tr>
@@ -111,12 +111,12 @@ Renan Feitosa (GRR2026XXXX)
 
 # Registradores
 
-| Registrador | Convenção | Descrição |
-| :---- | :---- | :---- |
-| x0 | zero | Constante Zero |
-| x1 | ra | Endereço de Retorno |
-| x2 | sp | Ponteiro de Pilha |
-| x3 \- x4 | a0 \-a1 | Argumento / Retorno de Função  |
-| x5 \- x8 | a2 \- a5 | Argumentos de Função |
-| x9 \- x15 | t0 \- t6 | Temporários |
+| Registrador | Convenção | Descrição                     |
+| :---------- | :-------- | :---------------------------- |
+| x0          | zero      | Constante Zero                |
+| x1          | ra        | Endereço de Retorno           |
+| x2          | sp        | Ponteiro de Pilha             |
+| x3 \- x4    | a0 \- a1   | Argumento / Retorno de Função |
+| x5 \- x8    | a2 \- a5  | Argumentos de Função          |
+| x9 \- x15   | t0 \- t6  | Temporários                   |
 
