@@ -39,9 +39,10 @@ Renan Feitosa (GRR2026XXXX)
       <td align="center"><b>I</b></td>
     </tr>
     <tr>
-      <td colspan="4" align="center"><b>imm</b></td>
+      <td colspan="2" align="center"><b>imm [8-4]</b></td>
       <td colspan="2" align="center"><b>rs2</b></td>
       <td colspan="2" align="center"><b>rs1</b></td>
+      <td colspan="2" align="center"><b>imm [3-0]</b></td>
       <td colspan="2" align="center"><b>opcode</b></td>
       <td align="center"><b>B</b></td>
     </tr>
@@ -119,4 +120,5 @@ Renan Feitosa (GRR2026XXXX)
 | x3 \- x4    | a0 \- a1   | Argumento / Retorno de Função |
 | x5 \- x8    | a2 \- a5  | Argumentos de Função          |
 | x9 \- x15   | t0 \- t6  | Temporários                   |
+
 
