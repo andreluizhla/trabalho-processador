@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-montador.py - Montador (assembler) para a ISA do trabalho de ISA e Microarquitetura.
+compilador.py - Montador (assembler) para a ISA do trabalho de ISA e Microarquitetura.
 
 Codifica um programa .asm em palavras de 20 bits e gera um arquivo no
 formato "v3.0 hex words plain", que o Logisim carrega em uma memoria
 (RAM/ROM) com Data Bits = 20.
 
 Uso:
-    python3 montador.py programa.asm
-    python3 montador.py programa.asm -o programa.hex
-    python3 montador.py programa.asm -o programa.hex --bin
-    python3 montador.py programa.asm -v
+    python3 compilador.py programa.asm
+    python3 compilador.py programa.asm -o programa.hex
+    python3 compilador.py programa.asm -o programa.hex --bin
+    python3 compilador.py programa.asm -v
 
 Formato das instrucoes (20 bits):
     R: funct[19:16] rs2[15:12] rs1[11:8] rd[7:4] opcode[3:0]
     I: imm[19:12]   rs1[11:8]  rd[7:4]  opcode[3:0]
     B: imm[7:4][19:16] rs2[15:12] rs1[11:8] imm[3:0][7:4] opcode[3:0]
+       (o imediato e um valor signed de 8 bits; a ISA tem um typo
+        "imm[8-4]" mas o campo so cabe 4 bits, entao o correto e
+        imm[7:4] em [19:16] e imm[3:0] em [7:4].)
     J: imm[19:8]               rd[7:4]  opcode[3:0]
 
 Convencao de deslocamento (branch/jump): imm = rotulo - endereco_da_instrucao.
@@ -104,8 +107,8 @@ def i_type(imm, rs1, rd, opcode):
 
 
 def b_type(imm, rs2, rs1, opcode):
-    imm_hi = (imm >> 4) & 0xF
-    imm_lo = imm & 0xF
+    imm_hi = (imm >> 4) & 0xF   # bits [7:4] do imediato -> [19:16]
+    imm_lo = imm & 0xF          # bits [3:0] do imediato -> [7:4]
     return (((imm_hi & 0xF) << 16) | ((rs2 & 0xF) << 12) |
             ((rs1 & 0xF) << 8)   | ((imm_lo & 0xF) << 4) | (opcode & 0xF))
 
@@ -144,12 +147,19 @@ def number(tok):
         raise AsmError("numero invalido: '%s'" % tok)
 
 
-def check_range(value, bits, what):
-    lo = -(1 << (bits - 1))
-    hi = (1 << (bits - 1)) - 1
-    if not (lo <= value <= hi):
-        raise AsmError("%s fora do intervalo de %d bits com sinal (%d..%d): %d"
-                       % (what, bits, lo, hi, value))
+def check_range(value, bits, what, signed=True):
+    if signed:
+        lo = -(1 << (bits - 1))
+        hi = (1 << (bits - 1)) - 1
+        if not (lo <= value <= hi):
+            raise AsmError("%s fora do intervalo de %d bits com sinal (%d..%d): %d"
+                           % (what, bits, lo, hi, value))
+    else:
+        lo = 0
+        hi = (1 << bits) - 1
+        if not (lo <= value <= hi):
+            raise AsmError("%s fora do intervalo de %d bits sem sinal (%d..%d): %d"
+                           % (what, bits, lo, hi, value))
 
 
 def expect_ops(mnem, ops, n):
@@ -164,6 +174,21 @@ def branch_offset(tok, labels, addr):
         base = addr + 1 if BRANCH_REL_TO_NEXT else addr
         return labels[t] - base
     return number(t)
+
+
+def parse_mem_operand(tok):
+    """
+    Aceita a forma 'imm(rs1)' (estilo RISC-V) e devolve (imm, rs1).
+    Retorna None se o token nao estiver nesse formato.
+    """
+    t = tok.strip()
+    m = re.match(r"^(.*?)\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)$", t)
+    if not m:
+        return None
+    imm_tok = m.group(1).strip()
+    base    = m.group(2)
+    imm = number(imm_tok) if imm_tok else 0
+    return imm, reg(base)
 
 
 # ---------------------------------------------------------------------------
@@ -253,18 +278,55 @@ def encode_instruction(entry, labels):
         op = OP_BEQ if mnem == "beqz" else OP_BNE
         return b_type(off, 0, rs, op)                     # rs1 = rs, rs2 = x0
 
+    # -------------------- not (aceita 2 ou 3 operandos) --------------------
+    if mnem == "not":
+        if len(ops) == 2:
+            rd, rs1 = reg(ops[0]), reg(ops[1])
+        elif len(ops) == 3:
+            rd, rs1 = reg(ops[0]), reg(ops[1])
+            # ISA exige x0 como 3o operando; aceita qualquer zero-equivalente
+            if reg(ops[2]) != 0:
+                raise AsmError("'not' espera x0 como 3o operando")
+        else:
+            raise AsmError("'not' espera 2 ou 3 operandos, mas recebeu %d" % len(ops))
+        return r_type(R_FUNCT["not"], 0, rs1, rd)
+
     # ------------------------------- R -------------------------------
     if mnem in R_FUNCT:
         expect_ops(mnem, ops, 3)
         rd, rs1, rs2 = reg(ops[0]), reg(ops[1]), reg(ops[2])
         return r_type(R_FUNCT[mnem], rs2, rs1, rd)
 
-    # ------------------------------- I -------------------------------
+    # --------------------- sw / lw (aceita 2 sintaxes) ---------------------
+    if mnem in ("sw", "lw"):
+        opcode = I_OPCODE[mnem]
+        # forma 1: sw rd, rs1, imm
+        if len(ops) == 3:
+            rd, rs1 = reg(ops[0]), reg(ops[1])
+            imm = number(ops[2])
+        # forma 2: sw rd, imm(rs1)   (estilo RISC-V)
+        elif len(ops) == 2:
+            rd = reg(ops[0])
+            parsed = parse_mem_operand(ops[1])
+            if parsed is None:
+                raise AsmError("'%s' espera 'rd, rs1, imm' ou 'rd, imm(rs1)'" % mnem)
+            imm, rs1 = parsed
+        else:
+            raise AsmError("'%s' espera 2 ou 3 operandos, mas recebeu %d"
+                           % (mnem, len(ops)))
+        check_range(imm, 8, "imediato de '%s'" % mnem)
+        return i_type(imm, rs1, rd, opcode)
+
+    # -------------------- I restantes (addi/slli/srli) --------------------
     if mnem in I_OPCODE:
         expect_ops(mnem, ops, 3)
         rd, rs1 = reg(ops[0]), reg(ops[1])
         imm = number(ops[2])
-        check_range(imm, 8, "imediato de '%s'" % mnem)
+        if mnem in ("slli", "srli"):
+            # shift nao tem sentido negativo: usa faixa unsigned
+            check_range(imm, 8, "imediato de '%s'" % mnem, signed=False)
+        else:
+            check_range(imm, 8, "imediato de '%s'" % mnem)
         return i_type(imm, rs1, rd, I_OPCODE[mnem])
 
     if mnem == "jalr":

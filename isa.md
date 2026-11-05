@@ -2,7 +2,7 @@
 
 Feito por:   
 André Luiz Hlatchuk (GRR20261342)   
-Renan Feitosa (GRR2026XXXX)
+Renan Ribeiro Feitosa (GRR20261927)
 
 # Formato de Instruções
 
