@@ -85,7 +85,7 @@ Renan Ribeiro Feitosa (GRR20261927)
     <tr><td>I</td><td>addi</td><td>rd = rs1 + imm</td><td>addi rd, rs1, imm</td><td>0001</td><td></td></tr>
     <tr><td>I</td><td>slli</td><td>rd = rs1 &lt;&lt; imm</td><td>slli rd, rs1, imm</td><td>0010</td><td></td></tr>
     <tr><td>I</td><td>srli</td><td>rd = rs1 &gt;&gt; imm</td><td>srli rd, rs1, imm</td><td>0011</td><td></td></tr>
-    <tr><td>I</td><td>sw</td><td>M[rd + imm] = rs1</td><td>sw rd, rs1, imm</td><td>0100</td><td></td></tr>
+    <tr><td>I</td><td>sw</td><td>M[rs1 + imm] = rd</td><td>sw rd, rs1, imm</td><td>0100</td><td></td></tr>
     <tr><td>I</td><td>lw</td><td>rd = M[rs1 + imm]</td><td>lw rd, rs1, imm</td><td>0101</td><td></td></tr>
     <tr><td>B</td><td>beq</td><td>if (rs1 == rs2) PC += imm</td><td>beq rs1, rs2, imm</td><td>0110</td><td></td></tr>
     <tr><td>B</td><td>bne</td><td>if (rs1 != rs2) PC += imm</td><td>bne rs1, rs2, imm</td><td>0111</td><td></td></tr>
@@ -93,9 +93,12 @@ Renan Ribeiro Feitosa (GRR20261927)
     <tr><td>B</td><td>bge</td><td>if (rs1 &gt;= rs2) PC += imm</td><td>bge rs1, rs2, imm</td><td>1001</td><td></td></tr>
     <tr><td>J</td><td>jal</td><td>rd = PC + 1; PC += imm</td><td>jal rd, imm</td><td>1010</td><td></td></tr>
     <tr><td>I</td><td>jalr</td><td>rd = PC + 1; PC = rs1 + imm</td><td>jalr rd, rs1, imm</td><td>1011</td><td></td></tr>
-    <tr><td>I</td><td>ebreak</td><td>Finaliza o programa</td><td>ebreak</td><td>1100</td><td></td></tr>
-    <tr>
-      <td rowspan="3" colspan="4" style="vertical-align: middle; text-align: center;">Reservado para expansão futura</td>
+	<tr>
+      <td rowspan="4" colspan="4" style="vertical-align: middle; text-align: center;">Reservado para expansão futura</td>
+      <td>1100</td>
+      <td></td>
+    </tr>
+	<tr>
       <td>1101</td>
       <td></td>
     </tr>
