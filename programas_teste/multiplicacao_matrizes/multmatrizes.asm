@@ -9,11 +9,11 @@ main:
 
 inic:
   addi x12, x5, 1
-  sw   x12, x5, 0
+  sw   x5, x12, 0
   rem  x13, x5, x6
   addi x13, x13, 1
   add  x11, x5, x7
-  sw   x13, x11, 0
+  sw   x11, x13, 0
   addi x5, x5, 1
   blt  x5, x14, inic
  
@@ -42,7 +42,7 @@ loop_k:
   mul  x10, x3, x6
   add  x10, x10, x4
   add  x10, x10, x8
-  sw   x9, x10, 0
+  sw   x10, x9, 0
   addi x4, x4, 1
   blt  x4, x6, loop_j
   addi x3, x3, 1

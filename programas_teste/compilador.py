@@ -15,12 +15,9 @@ Uso:
 
 Formato das instrucoes (20 bits):
     R: funct[19:16] rs2[15:12] rs1[11:8] rd[7:4] opcode[3:0]
-    I: imm[19:12]   rs1[11:8]  rd[7:4]  opcode[3:0]
+    I: imm[19:12] rs1[11:8]  rd[7:4]  opcode[3:0]
     B: imm[7:4][19:16] rs2[15:12] rs1[11:8] imm[3:0][7:4] opcode[3:0]
-       (o imediato e um valor signed de 8 bits; a ISA tem um typo
-        "imm[8-4]" mas o campo so cabe 4 bits, entao o correto e
-        imm[7:4] em [19:16] e imm[3:0] em [7:4].)
-    J: imm[19:8]               rd[7:4]  opcode[3:0]
+    J: imm[19:8] rd[7:4]  opcode[3:0]
 
 Convencao de deslocamento (branch/jump): imm = rotulo - endereco_da_instrucao.
 Se a sua microarquitetura somar o imediato DEPOIS de PC+1, troque a constante
@@ -74,7 +71,6 @@ OP_BLT    = 0x8
 OP_BGE    = 0x9
 OP_JAL    = 0xA
 OP_JALR   = 0xB
-OP_EBREAK = 0xC
 
 R_FUNCT = {
     "add": 0x0, "sub": 0x1, "mul": 0x2, "div": 0x3,
@@ -174,21 +170,6 @@ def branch_offset(tok, labels, addr):
         base = addr + 1 if BRANCH_REL_TO_NEXT else addr
         return labels[t] - base
     return number(t)
-
-
-def parse_mem_operand(tok):
-    """
-    Aceita a forma 'imm(rs1)' (estilo RISC-V) e devolve (imm, rs1).
-    Retorna None se o token nao estiver nesse formato.
-    """
-    t = tok.strip()
-    m = re.match(r"^(.*?)\(\s*([A-Za-z_][A-Za-z0-9_]*)\s*\)$", t)
-    if not m:
-        return None
-    imm_tok = m.group(1).strip()
-    base    = m.group(2)
-    imm = number(imm_tok) if imm_tok else 0
-    return imm, reg(base)
 
 
 # ---------------------------------------------------------------------------
@@ -297,22 +278,15 @@ def encode_instruction(entry, labels):
         rd, rs1, rs2 = reg(ops[0]), reg(ops[1]), reg(ops[2])
         return r_type(R_FUNCT[mnem], rs2, rs1, rd)
 
-    # --------------------- sw / lw (aceita 2 sintaxes) ---------------------
+    # ---------------------------- sw / lw ----------------------------------
     if mnem in ("sw", "lw"):
         opcode = I_OPCODE[mnem]
-        # forma 1: sw rd, rs1, imm
+        #  sw rd, rs1, imm
         if len(ops) == 3:
             rd, rs1 = reg(ops[0]), reg(ops[1])
             imm = number(ops[2])
-        # forma 2: sw rd, imm(rs1)   (estilo RISC-V)
-        elif len(ops) == 2:
-            rd = reg(ops[0])
-            parsed = parse_mem_operand(ops[1])
-            if parsed is None:
-                raise AsmError("'%s' espera 'rd, rs1, imm' ou 'rd, imm(rs1)'" % mnem)
-            imm, rs1 = parsed
         else:
-            raise AsmError("'%s' espera 2 ou 3 operandos, mas recebeu %d"
+            raise AsmError("'%s' espera 3 operandos, mas recebeu %d"
                            % (mnem, len(ops)))
         check_range(imm, 8, "imediato de '%s'" % mnem)
         return i_type(imm, rs1, rd, opcode)
@@ -323,7 +297,6 @@ def encode_instruction(entry, labels):
         rd, rs1 = reg(ops[0]), reg(ops[1])
         imm = number(ops[2])
         if mnem in ("slli", "srli"):
-            # shift nao tem sentido negativo: usa faixa unsigned
             check_range(imm, 8, "imediato de '%s'" % mnem, signed=False)
         else:
             check_range(imm, 8, "imediato de '%s'" % mnem)
@@ -335,10 +308,6 @@ def encode_instruction(entry, labels):
         imm = number(ops[2])
         check_range(imm, 8, "imediato de 'jalr'")
         return i_type(imm, rs1, rd, OP_JALR)
-
-    if mnem == "ebreak":
-        expect_ops(mnem, ops, 0)
-        return i_type(0, 0, 0, OP_EBREAK)
 
     # ------------------------------- B -------------------------------
     if mnem in B_OPCODE:
